@@ -63,6 +63,18 @@ public class HuffProcessor {
 			if (value == -1) break;
 			counts[value] += 1;
 		}
+		if (myDebugLevel >= DEBUG_HIGH)
+		{
+			System.out.println("chunk\tfreq");
+			for (int x = 0; x< counts.length; x++)
+			{
+				if (counts[x]>0)
+				{
+					
+					System.out.printf("%d \t %d\n", x, counts[x]);
+				}
+			}
+		}
 		counts[PSEUDO_EOF] = 1;
 		return counts;
 	}
@@ -78,6 +90,10 @@ public class HuffProcessor {
 				p.add(new HuffNode(x, counts[x], null, null));
 			}
 		}
+		if (myDebugLevel >= DEBUG_HIGH)
+		 {
+			 System.out.printf("pq created with %d nodes\n", p.size());
+		 }
 
 		while (p.size() > 1) {
 		    HuffNode left = p.remove();
@@ -102,9 +118,13 @@ public class HuffProcessor {
 		{
 			return;
 		}
-		if (temp.myLeft == null && temp.myLeft == null)
+		if (temp.myLeft == null && temp.myRight == null)
 		{
 			codes[root.myValue] = s; 
+			if (myDebugLevel>= DEBUG_HIGH)
+			{
+				System.out.printf("encoding for %d is %s\n", root.myValue, s);
+			}
 			return;
 		}
 		helpCode(codes, root.myLeft, s + "0");
@@ -124,6 +144,10 @@ public class HuffProcessor {
 		{
 			out.writeBits(1, 1);
 			out.writeBits(BITS_PER_WORD + 1, root.myValue);
+			if (myDebugLevel >= DEBUG_HIGH)
+			{
+				System.out.printf("wrote leaf for tree %d\n", root.myValue);
+			}
 		}
 	}
 	
@@ -135,6 +159,10 @@ public class HuffProcessor {
 			{
 				out.writeBits(codes[x].length(), Integer.parseInt(codes[x], 2));
 			}
+		}
+		if (myDebugLevel >= DEBUG_HIGH)
+		{
+			System.out.println("wrote magic number " + in.readBits(BITS_PER_INT));
 		}
 	}
 	
@@ -209,5 +237,10 @@ public class HuffProcessor {
 				}
 			}
 		}
+	}
+	
+	public static void main (String[] args)
+	{
+		 HuffProcessor hp = new HuffProcessor(HuffProcessor.DEBUG_HIGH);
 	}
 }
