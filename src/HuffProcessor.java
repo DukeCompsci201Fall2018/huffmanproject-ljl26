@@ -163,6 +163,7 @@ public class HuffProcessor {
 			if (value == -1) break;
 			out.writeBits(codes[value].length(), Integer.parseInt(codes[value], 2));
 		}
+		out.writeBits(codes[PSEUDO_EOF].length(), Integer.parseInt(codes[PSEUDO_EOF], 2));
 		if (myDebugLevel >= DEBUG_HIGH)
 		{
 			System.out.println("wrote magic number " + in.readBits(BITS_PER_INT));
