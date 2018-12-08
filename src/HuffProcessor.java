@@ -49,6 +49,7 @@ public class HuffProcessor {
 		
 		out.writeBits(BITS_PER_INT, HUFF_TREE);
 		writeHeader(root, out);
+		
 		in.reset();
 		writeCompressedBits(codes, in, out);
 		out.close();
@@ -63,6 +64,7 @@ public class HuffProcessor {
 			if (value == -1) break;
 			counts[value] += 1;
 		}
+		counts[PSEUDO_EOF] = 1;
 		if (myDebugLevel >= DEBUG_HIGH)
 		{
 			System.out.println("chunk\tfreq");
@@ -75,7 +77,6 @@ public class HuffProcessor {
 				}
 			}
 		}
-		counts[PSEUDO_EOF] = 1;
 		return counts;
 	}
 	
