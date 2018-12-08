@@ -242,9 +242,4 @@ public class HuffProcessor {
 			}
 		}
 	}
-	
-	public static void main (String[] args)
-	{
-		 HuffProcessor hp = new HuffProcessor(HuffProcessor.DEBUG_HIGH);
-	}
 }
