@@ -114,12 +114,11 @@ public class HuffProcessor {
 	
 	private void helpCode(String[] codes, HuffNode root, String s)
 	{
-		HuffNode temp = root;
-		if (temp == null)
+		if (root == null)
 		{
 			return;
 		}
-		if (temp.myLeft == null && temp.myRight == null)
+		if (root.myLeft == null && root.myRight == null)
 		{
 			codes[root.myValue] = s; 
 			if (myDebugLevel>= DEBUG_HIGH)
@@ -135,6 +134,10 @@ public class HuffProcessor {
 	private void writeHeader(HuffNode root, BitOutputStream out)
 	{
 		HuffNode temp;
+		if (root == null)
+		{
+			return;
+		}
 		if (!(root.myLeft == null && root.myRight == null))
 		{
 			out.writeBits(1, 0);
@@ -154,12 +157,11 @@ public class HuffProcessor {
 	
 	private void writeCompressedBits(String[] codes, BitInputStream in, BitOutputStream out)
 	{
-		for (int x = 0; x < codes.length; x++)
+		while (true)
 		{
-			if (codes[x] != null && codes[x].length() > 0)
-			{
-				out.writeBits(codes[x].length(), Integer.parseInt(codes[x], 2));
-			}
+			int value = in.readBits(BITS_PER_WORD);
+			if (value == -1) break;
+			out.writeBits(codes[value].length(), Integer.parseInt(codes[value], 2));
 		}
 		if (myDebugLevel >= DEBUG_HIGH)
 		{
